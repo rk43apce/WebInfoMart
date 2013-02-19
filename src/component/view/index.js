@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Row,Col, Collapse } from 'reactstrap';
+import { Row,Col, Collapse, Button } from 'reactstrap';
 import AddMerchnat from './add-merchant';
 import EditMerchnat from './edit-merchant';
 import Pagination from './pagination';
@@ -20,7 +20,8 @@ export default class Merchnat extends Component {
         isHistoryOpen: false,
         logHistory:[],
         search:'',
-        currentPage: 1
+        currentPage: 1,
+        msg:''
         
     }
 
@@ -134,35 +135,31 @@ export default class Merchnat extends Component {
         let {isModal, merchants, editMerchantId, actionType, isHistoryOpen, logHistory, search, currentPage} =  this.state
 
         const merchantPerPage = 10
-        const indexOfLastPost = currentPage * merchantPerPage;       
-        const indexOfFirstPost = indexOfLastPost - merchantPerPage;   
+        const indexOfLastMerchant = currentPage * merchantPerPage;       
+        const indexOfFirstMerchant = indexOfLastMerchant - merchantPerPage;   
 
         let filterMerchants = merchants.filter(merchant=>{           
             return(
 
-                merchant.status.toLowerCase().search(search.toLowerCase()) !=-1 ||
-                merchant.name.toLowerCase().search(search.toLowerCase()) !=-1 || 
-                merchant.description.toLowerCase().search(search.toLowerCase()) !=-1 
+                merchant.id.toString().toLowerCase().search(search.toLowerCase()) !=-1 ||
+                merchant.name.toString().toLowerCase().search(search.toLowerCase()) !=-1 ||
+                merchant.description.toString().toLowerCase().search(search.toLowerCase()) !=-1 ||
+                merchant.status.toString().toLowerCase().search(search.toLowerCase()) !=-1
             )
         })
 
-        const currentMerchants = filterMerchants.slice(indexOfFirstPost, indexOfLastPost);
+        const currentMerchants = filterMerchants.slice(indexOfFirstMerchant, indexOfLastMerchant);
 
         return(
             <div className="container mt-5">
                 <div className="card shodow p-3">
                     <Row>
                         <Col xs={6}>
-                            <div className="panel-heading pb-3">Merchant Management System</div>
+                            <div className="panel-heading pb-3">
+                                <h4>Merchant Management System</h4>  
+                            </div>
                         </Col>
-                        <Col xs={6}>
-                            <div className="text-right">
-                                <button className="btn btn-default" 
-                                onClick={()=>this.toggleModal('addMerchant')}>
-                                    +Add Merchant 
-                                </button>                               
-                            </div>                            
-                        </Col>
+                   
                     </Row>
                     
                     <div className="panel-body">    
@@ -170,10 +167,16 @@ export default class Merchnat extends Component {
                         <li className="list-group-item ">
                             <Row>
                             <Col xs={6} className="">
-                                   
+                            <div className="text-left">
+                         
+                                <Button onClick={()=>this.toggleModal('addMerchant')} color="primary" size="sm"><i className="fa fa-plus" aria-hidden="true"></i> Add Merchant</Button>                           
+                            </div> 
                                 </Col>
-                                <Col xs={6} className="">
+                                <Col xs={6} className="search-panel">  
                                     <input type="text" className="form-control" name="search" placeholder="Search here... " autoFocus onChange={this.onSearch} />
+                                    <span className="search">
+                                        <i className="fa fa-search"></i>
+                                    </span>
                                 </Col>   
                             </Row>        
                         </li>                      
@@ -181,15 +184,16 @@ export default class Merchnat extends Component {
                             <Row>
                                 
                                 
-                                <Col xs={8}>
+                                <Col xs={9}>
                                     <Row>
-                                        <Col xs={2}> S.No </Col>
-                                        <Col xs={4}> Merchant Name  </Col>
-                                        <Col xs={4}> Description </Col>
+                                
+                                        <Col xs={3}> Merchant ID </Col>
+                                        <Col xs={3}> Merchant Name  </Col>
+                                        <Col xs={3}> Description </Col>
                                         <Col xs={2}> Status </Col>
                                     </Row>
                                 </Col>   
-                                <Col xs={4}>
+                                <Col xs={3}>
                                     <Row>
                                     <Col xs={12}> Actions </Col>  
                                     </Row>
@@ -206,25 +210,48 @@ export default class Merchnat extends Component {
                                     <li className="list-group-item" key={merchant.id} >
                                         
                                     <Row>
-                                        <Col xs={8}>
-                                            <Row  className="m-row" onClick={()=>this.toggleHistory(merchant.id)}>
-                                                <Col xs={2}> {i+1 }</Col>
-                                                <Col xs={4}> {merchant.name }</Col>
-                                                <Col xs={4}> {merchant.description }</Col>
+                                        <Col xs={9}>
+                                            <Row  className="m-row" >
+                                            
+                                                <Col xs={3}> 
+                                                <button type="button" className="btn btn-link btn-sm pl-0">
+                                                <i 
+                                                className={`fa fa-${merchant.id == isHistoryOpen?
+                                                "minus"
+                                                :
+                                                "plus"
+                                                }-circle 
+
+                                                text-${merchant.id == isHistoryOpen?
+                                                    "danger"
+                                                    :
+                                                    "success"
+                                                    }`
+
+                                                } 
+
+                                                onClick={()=>this.toggleHistory(merchant.id)}>
+                                                </i>  
+                                                </button>
+                                                {merchant.id }
+                                                
+                                                </Col>
+                                                <Col xs={3}> {merchant.name }</Col>
+                                                <Col xs={3}> {merchant.description }</Col>
                                                 <Col xs={2}> {merchant.status }</Col> 
                                             </Row>                                        
                                         </Col>     
-                                        <Col xs={4}>
+                                        <Col xs={3}>
                                             <Row>
                                                 <Col xs={12}>    
-                                                    <ul className="nav">   
-                                                        <li className="nav-item">
-                                                            <a className="nav-link" href="#" onClick={()=>this.editMerchant(merchant.id)} >Edit</a>
+                                                    <ul className="nav action">   
+                                                        <li className="nav-item ">
+                                                            <a className="nav-link" href="#" onClick={()=>this.editMerchant(merchant.id)} ><i className="fa fa-edit"></i></a>
                                                         </li>
                                                         <li className="nav-item">
                                                             <a className="nav-link" href="#"
                                                                 onClick={()=>this.removeMerchant(merchant.id)}
-                                                            >Delete</a>
+                                                            ><i className="fa fa-trash" aria-hidden="true"></i></a>
                                                         </li>
                                                         <li className="nav-item">
                                                             <a className="nav-link" href="#"
@@ -232,9 +259,9 @@ export default class Merchnat extends Component {
                                                             >                   
                                                             {
                                                             merchant.status === 'Active'?
-                                                                'Inactive'
+                                                                'Deactivate'
                                                                 :
-                                                                'Active'
+                                                                'Activate'
                                                             }
                                                             </a>
                                                         </li>             
@@ -248,7 +275,7 @@ export default class Merchnat extends Component {
                                         <Row className="mt-2 border-top" >
                                             <Col xs={12}>
                                                 <div className="history p-3">
-                                                <h4>Intraction Histroy</h4>
+                                                <h5>Intraction Histroy</h5>
                                                     <ul className=" timeline">
                                                         {
                                                             logHistory.map((history,i)=>{
