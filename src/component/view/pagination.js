@@ -8,12 +8,8 @@ export default class Pagination extends Component{
 
     render(){
 
-      console.log(this.props)
-
       let {merchantPerPage, totalmerchant} = this.props
-
-        let pageNumbers = []
-        
+        let pageNumbers = []        
         for (let i = 1; i <= Math.ceil(totalmerchant / merchantPerPage); i++) {
             pageNumbers.push(i);
         }
