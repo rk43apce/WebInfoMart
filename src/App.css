@@ -109,3 +109,6 @@ ul.timeline > li:before {
 .slider.round:before {
   border-radius: 50%;
 }
+.aaa{
+  background-color: #ccc;
+}
