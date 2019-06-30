@@ -29,6 +29,8 @@ export default class EditMerchnat extends Component {
 
           localStorage.setItem("merchants", JSON.stringify(updatedMerchant)); 
           this.props.getMerchant()
+          this.props.savelogHistory(editMerchantId, 'Update merchant information')
+          this.props.getLogHistory(editMerchantId)
           this.props.toggleModal()   
     }
 

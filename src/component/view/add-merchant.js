@@ -45,7 +45,7 @@ export default class AddMerchnat extends Component {
                         <ModalBody>                            
                             <div className="form-group">
                                 <label>Name</label>
-                                <input type="text" name="name" className="form-control" placeholder="Enter marchant name..." required={true}/>
+                                <input type="text" name="name" className="form-control" placeholder="Enter marchant name..." required={true} autoFocus/>
                             </div>
                             <div className="form-group">
                                 <label>Description</label>                         

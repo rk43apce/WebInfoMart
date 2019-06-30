@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import Merchnat from './component/view';
+import 'font-awesome/css/font-awesome.min.css';
 
 
 function App() {
